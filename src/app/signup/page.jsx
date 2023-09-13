@@ -22,7 +22,7 @@ const Signup = () => {
 
   return (
     <div>
-      <form onSubmit={(e) => handleSignup(e)}>
+      <form onSubmit={(e) => handleSignup(e)} className="flex items-center justify-center">
         <div>
           <span style={{ fontWeight: "800" }}>Sign Up </span> to continue...
         </div>
@@ -32,7 +32,6 @@ const Signup = () => {
             <input
               name="email"
               type="email"
-              style={{ color: "black" }}
               //   className={`${styles.input} ${styles["input-misc"]}`}
               onChange={(e) =>
                 setCredentials({ ...credentials, Email: e.target.value })
@@ -45,7 +44,6 @@ const Signup = () => {
             <input
               name="password"
               type="password"
-              style={{ color: "black" }}
               //   className={`${styles.input} ${styles["input-misc"]}`}
               onChange={(e) =>
                 setCredentials({ ...credentials, Password: e.target.value })
