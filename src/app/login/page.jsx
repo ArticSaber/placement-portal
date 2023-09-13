@@ -111,8 +111,9 @@ const Login = () => {
             >
               Login
             </button>
-            <div className="flex justify-end p-4 text-[#4E99EC] text-lg ">
-              <a href="/reset">Password Reset?</a>
+            <div className="flex flex-row justify-between p-4 text-[#4E99EC] text-lg ">
+              <a href="/signup">wanna sign up?</a>
+              <a href="">Password Reset?</a>
             </div>
           </div>
         </div>
