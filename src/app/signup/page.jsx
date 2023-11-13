@@ -2,12 +2,12 @@
 import { BASE_URL } from "@/config";
 import { useState } from "react";
 import { useRouter } from "next/navigation";
-import { toast } from "react-toastify";
 
 const Signup = () => {
   const [credentials, setCredentials] = useState({
-    Email: "",
-    Password: "",
+    email: "",
+    password: "",
+    role: "student",
   });
   const router = useRouter();
   const handleSignup = async (e) => {
@@ -16,23 +16,13 @@ const Signup = () => {
       cache: "no-store",
       credentials: "include",
       method: "POST",
-      body: JSON.stringify({
-        email: credentials.Email,
-        password: credentials.Password,
-      }),
+      body: JSON.stringify(credentials),
     });
-    const data = await response.json();
-    if (response.status > 399 && response.status < 499) {
-      toast.error(data?.message, { autoClose: 3000 });
-    } else {
-      toast(data?.message, { autoClose: 1000 });
-      router.push("/");
-      router.refresh();
-    }
+    console.log(credentials);
   };
 
   return (
-    <div className="flex items-center justify-center flex-row select-none">
+    <div className="flex items-center justify-center flex-row select-none bg-white text-black">
       <div
         className="flex flex-col relative bg-no-repeat h-[100vh] object-cover w-[40%] "
         style={{
@@ -88,7 +78,7 @@ const Signup = () => {
             name="email"
             type="email"
             onChange={(e) =>
-              setCredentials({ ...credentials, Email: e.target.value })
+              setCredentials({ ...credentials, email: e.target.value })
             }
             placeholder="Enter email"
           />
@@ -100,10 +90,22 @@ const Signup = () => {
             name="password"
             type="password"
             onChange={(e) =>
-              setCredentials({ ...credentials, Password: e.target.value })
+              setCredentials({ ...credentials, password: e.target.value })
             }
             placeholder="Enter password"
           />
+          <label>Role</label>
+          <select
+            className="border-2 border-gray p-2 rounded-md"
+            name="role"
+            onChange={(e) =>
+              setCredentials({ ...credentials, role: e.target.value })
+            }
+          >
+            <option value="student">Student</option>
+            <option value="recruiter">Recruiter</option>
+          </select>
+
           <div>
             <button
               type="submit"
@@ -111,6 +113,14 @@ const Signup = () => {
             >
               Sign up
             </button>
+            <div>
+              <div className="flex gap-2 text-gray-500 mt-3">
+                Already have an account?
+                <a href="/login" className="text-blue-500">
+                  Login
+                </a>
+              </div>
+            </div>
           </div>
         </div>
       </form>

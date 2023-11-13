@@ -2,37 +2,28 @@
 import { useState } from "react";
 import { useRouter } from "next/navigation";
 import { BASE_URL } from "@/config";
-import { toast } from "react-toastify";
 
 const Login = () => {
   const router = useRouter();
   const [credentials, setCredentials] = useState({
-    Email: "",
-    Password: "",
+    email: "",
+    password: "",
   });
   const handleLogin = async (e) => {
     e.preventDefault();
     const response = await fetch(BASE_URL + "/api/login", {
-      cache: "no-store",
       credentials: "include",
       method: "POST",
-      body: JSON.stringify({
-        Email: credentials.Email,
-        Password: credentials.Password,
-      }),
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(credentials),
     });
-    const data = await response.json();
-    if (response.status > 399 && response.status < 499) {
-      toast.error(data?.message, { autoClose: 3000 });
-    } else {
-      toast(data?.message, { autoClose: 1000 });
-      router.push("/");
-      router.refresh();
-    }
+    router.push("/dashboard");
   };
 
   return (
-    <div className="flex items-center justify-center flex-row select-none">
+    <div className="flex items-center justify-center flex-row select-none bg-white text-black ">
       <div
         className="flex flex-col relative bg-no-repeat h-[100vh] object-cover w-[40%] "
         style={{
@@ -88,7 +79,7 @@ const Login = () => {
             name="email"
             type="email"
             onChange={(e) =>
-              setCredentials({ ...credentials, Email: e.target.value })
+              setCredentials({ ...credentials, email: e.target.value })
             }
             placeholder="Enter email"
           />
@@ -100,7 +91,7 @@ const Login = () => {
             name="password"
             type="password"
             onChange={(e) =>
-              setCredentials({ ...credentials, Password: e.target.value })
+              setCredentials({ ...credentials, password: e.target.value })
             }
             placeholder="Enter password"
           />

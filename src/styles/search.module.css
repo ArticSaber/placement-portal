@@ -1,0 +1,39 @@
+.search {
+  width: 100vw;
+  /* height: 10vh; */
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.search > input:focus,
+.search > Select:focus {
+  outline: none;
+}
+
+.input {
+  background-color: var(--primary);
+  width: 30vw;
+  height: 6vh;
+  color: white;
+  border: none;
+  border-radius: 0.5rem 0 0 0.5rem !important;
+}
+
+.searchbtn {
+  width: 10vw;
+  height: 6vh;
+  border: none;
+  border-radius: 0 0.5rem 0.5rem 0 !important;
+}
+
+@media screen and (max-width: 768px) {
+  .input {
+    width: 55vw;
+    height: 4vh;
+  }
+  .searchbtn {
+    width: 25vw;
+    height: 4vh;
+  }
+}

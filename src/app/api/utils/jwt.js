@@ -1,11 +1,9 @@
 import { SignJWT, jwtVerify } from "jose";
-import { cookies } from "next/headers";
+import jwt from "jsonwebtoken";
 
 const jwtGenrator = async ({ payload }) => {
-  console.log("payload", payload.toString());
-  const user = payload.toString();
   const alg = "HS256";
-  return await new SignJWT({ user })
+  return await new SignJWT({ payload })
     .setProtectedHeader({ alg })
     .setExpirationTime(process.env.NEXT_PUBLIC_JWT_EXPIRE)
     .setIssuedAt()
@@ -20,8 +18,16 @@ const jwtVerifier = async (token) => {
     );
   } catch (error) {
     console.log(error);
-    cookies().delete("token");
+    // cookies().delete("token");
   }
 };
 
-export { jwtGenrator, jwtVerifier };
+const jwtDecode = async (token) => {
+  try {
+    return jwt.verify(token, process.env.NEXT_PUBLIC_JWT_SECRET);
+  } catch (error) {
+    console.log(error);
+  }
+};
+
+export { jwtGenrator, jwtVerifier, jwtDecode };
