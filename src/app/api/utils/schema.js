@@ -1,181 +1,51 @@
+// Importing necessary modules
 import mongoose from "mongoose";
 import bcrypt from "bcryptjs";
 
-const SocialSchema = mongoose.Schema({
-  facebook: {
+const ProjectSchema = new mongoose.Schema({
+  projectName: {
     type: String,
+    required: true,
   },
-  twitter: {
+  description: {
     type: String,
+    required: true,
   },
-  instagram: {
+  hostedLink: {
     type: String,
-  },
-  linkedin: {
-    type: String,
-    // required: true,
-    message: "Linkedin is required",
-  },
-  github: {
-    type: String,
-    // required: true,
-    message: "Github is required",
+    required: true,
   },
 });
 
-const EducationSchema = mongoose.Schema([
-  {
-    name: {
-      type: String,
-      // required: true,
-      message: "Degree is required",
-    },
-    description: {
-      type: String,
-      // required: true,
-      message: "College is required",
-    },
+const UserSchema = new mongoose.Schema({
+  name: {
+    type: String,
+    required: true,
   },
-]);
-
-const ExperienceSchema = mongoose.Schema([
-  {
-    name: {
-      type: String,
-      // required: true,
-      message: "Expreience name is required",
-    },
-    description: {
-      type: String,
-      // required: true,
-      message: "Expreience description is required",
-    },
+  age: {
+    type: Number,
+    required: true,
   },
-]);
-
-const ProjectSchema = mongoose.Schema([
-  {
-    name: {
-      type: String,
-      // required: true,
-      message: "Project name is required",
-    },
-    description: {
-      type: String,
-      // required: true,
-      message: "Project description is required",
-    },
-    link: {
-      type: String,
-      // required: true,
-      message: "Project link is required",
-    },
+  email: {
+    type: String,
+    required: true,
   },
-]);
-
-const CertificateSchema = mongoose.Schema([
-  {
-    name: {
-      type: String,
-      // required: true,
-      message: "Certificate name is required",
-    },
-    url: {
-      type: String,
-      // required: true,
-      message: "Certificate is required",
-    },
+  phoneNumber: {
+    type: String,
+    required: true,
   },
-]);
-
-const LanguageSchema = mongoose.Schema([
-  {
-    name: {
-      type: String,
-      // required: true,
-      message: "Language name is required",
-    },
-    description: {
-      type: String,
-      // enum: ["Read", "Write", "Speak"],
-      // required: true,
-      message: "Language level is required",
-    },
+  github: {
+    type: String,
+    required: true,
   },
-]);
-
-const UserDetailSchema = mongoose.Schema(
-  {
-    user: {
-      type: mongoose.Types.ObjectId,
-      // required: true,
-      ref: "User",
-      // unique: true,
-    },
-    name: {
-      type: String,
-      // required: true,
-      message: "Name is required",
-    },
-    designation: {
-      type: String,
-      // required: true,
-      message: "Designation is required",
-    },
-    regNo: {
-      type: String,
-      // required: true,
-      message: "Registration number is required",
-    },
-    description: {
-      type: String,
-      // required: true,
-      message: "Description is required",
-    },
-    address: {
-      type: String,
-      // required: true,
-      message: "Address is required",
-    },
-    phone: {
-      type: Number,
-      // required: true,
-      minlength: 10,
-      maxlength: 10,
-      message: "Phone number is required",
-    },
-    email: {
-      type: String,
-      // required: true,
-      message: "Email is required",
-    },
-    dob: {
-      type: String,
-      // required: true,
-      message: "Date of birth is required",
-    },
-    socials: SocialSchema,
-    education: [EducationSchema],
-    skills: {
-      type: [String],
-      // required: true,
-      message: "Skills is required",
-    },
-    experience: [ExperienceSchema],
-    projects: [ProjectSchema],
-    certificates: [CertificateSchema],
-    languages: [LanguageSchema],
-    photo: {
-      type: String,
-      // required: true,
-      message: "Photo is required",
-    },
+  linkedin: {
+    type: String,
+    required: true,
   },
-  {
-    timestamps: true,
-  }
-);
+  projects: [ProjectSchema],
+});
 
+// Define the User schema
 const User = new mongoose.Schema(
   {
     email: {
@@ -184,7 +54,7 @@ const User = new mongoose.Schema(
       unique: true,
       lowercase: true,
       validator: {
-        validate: (value) => /^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$/.test(value),
+        validate: (value) => /^[\w-.]+@([\w-]+\.)+[\w-]{2,4}$/.test(value),
         message: "Email is not valid",
       },
     },
@@ -195,21 +65,27 @@ const User = new mongoose.Schema(
     },
     role: {
       type: String,
-      enum: ["student", "admin", "recruiter"],
+      enum: ["student", "recruiter", "admin"],
       default: "student",
+    },
+    active: {
+      type: Boolean,
+      default: true,
     },
   },
   { timestamps: true }
 );
 
-User.pre("save", async function () {
-  this.password = await bcrypt.hash(this.password, 10);
+// Hash the password before saving the user
+User.pre("save", async function (next) {
+  if (this.isModified("password")) {
+    this.password = await bcrypt.hash(this.password, 10);
+  }
+  next();
 });
 
-const UserDetails =
-  mongoose.models.UserDetails ||
-  mongoose.model("UserDetails", UserDetailSchema);
-
-const authUser = mongoose.models.authUser || mongoose.model("authUser", User);
-
-export { authUser, UserDetails };
+// Create the model from the schema
+const authSchema = mongoose.models.authUser || mongoose.model("authUser", User);
+const UserDetailsSchema =
+  mongoose.models.UserSchema || mongoose.model("UserSchema", UserSchema);
+export { authSchema, UserDetailsSchema };

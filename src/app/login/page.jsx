@@ -11,7 +11,7 @@ const Login = () => {
   });
   const handleLogin = async (e) => {
     e.preventDefault();
-    const response = await fetch(BASE_URL + "/api/login", {
+    const response = await fetch(BASE_URL + "api/login", {
       credentials: "include",
       method: "POST",
       headers: {
@@ -19,7 +19,10 @@ const Login = () => {
       },
       body: JSON.stringify(credentials),
     });
-    router.push("/dashboard");
+    const data = await response.json();
+    console.log(data);
+    router.refresh();
+    router.push("/Dashboard");
   };
 
   return (

@@ -1,0 +1,62 @@
+/* ResumePage.module.css */
+
+.resumeContainer {
+  width: 40%;
+  margin: 50px auto;
+  padding: 20px;
+  background-color: #fff;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+}
+
+.header {
+  font-size: 2rem;
+  font-weight: bold;
+  margin-bottom: 15px;
+  color: #333;
+}
+
+
+.personalDetails {
+  display: flex;
+  justify-content: space-between;
+}
+
+.leftColumn {
+  width: 45%;
+}
+
+.rightColumn {
+  width: 45%;
+}
+
+.detail {
+  margin-bottom: 10px;
+  color: #555;
+}
+
+.projects {
+  margin-top: 20px;
+}
+
+.project {
+  margin-bottom: 20px;
+}
+
+/* Responsive styling */
+@media (max-width: 600px) {
+  .leftColumn,
+  .rightColumn {
+    width: 100%;
+  }
+}
+
+@media print {
+  .printable, .printable * {
+    visibility: visible;
+  }
+  .printable {
+    position: absolute;
+    left: 0;
+    top: 0;
+  }
+}

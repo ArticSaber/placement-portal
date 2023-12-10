@@ -3,6 +3,7 @@
 import { jwtVerifier } from "../app/api/utils/jwt";
 import { cookies } from "next/headers";
 
+// This is the role component
 const role = async () => {
   const { value } = cookies().get("token") || {};
   if (!value) {
