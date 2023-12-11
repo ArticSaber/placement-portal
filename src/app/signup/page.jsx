@@ -12,7 +12,7 @@ const Signup = () => {
   const router = useRouter();
   const handleSignup = async (e) => {
     e.preventDefault();
-    const response = await fetch(BASE_URL + "/api/add", {
+    const response = await fetch(BASE_URL + "/api/signup", {
       cache: "no-store",
       credentials: "include",
       method: "POST",
@@ -22,7 +22,7 @@ const Signup = () => {
     if (data.success) {
       router.push("/login");
     }
-    console.log(credentials);
+    console.log(data);
   };
 
   return (

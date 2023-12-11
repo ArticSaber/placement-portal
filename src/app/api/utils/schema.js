@@ -5,15 +5,14 @@ import bcrypt from "bcryptjs";
 const ProjectSchema = new mongoose.Schema({
   projectName: {
     type: String,
-    required: true,
+
   },
   description: {
     type: String,
-    required: true,
+
   },
-  hostedLink: {
+  hostedlink: {
     type: String,
-    required: true,
   },
 });
 

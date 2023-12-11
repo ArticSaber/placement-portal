@@ -5,6 +5,7 @@ import axios from "axios";
 import cls from "classnames";
 import userId from "@/components/userId";
 import { BASE_URL } from "@/config";
+import { useRouter } from "next/navigation";
 
 function ProfilePage() {
   const [form, setForm] = useState({
@@ -17,6 +18,8 @@ function ProfilePage() {
     projects: [],
   });
   const [isEditing, setIsEditing] = useState(false);
+
+  const router = useRouter();
 
   useEffect(() => {
     const fetchUserId = async () => {
@@ -66,8 +69,8 @@ function ProfilePage() {
     setForm((prevForm) => ({
       ...prevForm,
       projects: [
-        ...(prevForm.projects || []),
-        { projectName: "", description: "", HostedLink: "" },
+        ...(prevForm?.projects || []),
+        { projectName: "", description: "", hostedlink: "" },
       ],
     }));
   };
@@ -83,29 +86,29 @@ function ProfilePage() {
 
   const handleSubmit = (event) => {
     event.preventDefault();
-    console.log(form);
-    if (form._id) {
-      axios
-        .put(BASE_URL + "api/update/" + form._id, form)
-        .then((response) => {
-          console.log(response);
-          setIsEditing(false);
-        })
-        .catch((error) => {
-          console.log(error);
-        });
-    } else {
-      axios
-        .post(BASE_URL + "api/adduserdetails", form)
-        .then((response) => {
-          console.log(response);
-          setIsEditing(false);
-        })
-        .catch((error) => {
-          console.log(error);
-        });
-    }
+    const url = form._id ? `${BASE_URL}api/update/${form._id}` : `${BASE_URL}api/adduserdetails`;
+    const method = form._id ? 'PUT' : 'POST';
+    axios({
+      method,
+      url,
+      data: form
+    })
+    .then((response) => {
+      console.log(response);
+      const data = response.data;
+      if (data.success) {
+        router.refresh();
+        setIsEditing(false);
+      }
+    })
+    .catch((error) => {
+      console.error("Error:", error);
+    });
   };
+
+  if (!form._id) {
+    return <div>Loading...</div>;
+  }
 
   return (
     <div className={styles["profile-container"]}>
@@ -116,7 +119,7 @@ function ProfilePage() {
             className={styles["form-input"]}
             type="text"
             name="name"
-            value={form.name}
+            value={form?.name}
             onChange={handleChange}
             required
           />
@@ -127,7 +130,7 @@ function ProfilePage() {
             className={styles["form-input"]}
             type="number"
             name="age"
-            value={form.age}
+            value={form?.age}
             onChange={handleChange}
             required
           />
@@ -138,7 +141,7 @@ function ProfilePage() {
             className={styles["form-input"]}
             type="tel"
             name="phoneNumber"
-            value={form.phoneNumber}
+            value={form?.phoneNumber}
             onChange={handleChange}
             required
           />
@@ -149,7 +152,7 @@ function ProfilePage() {
             className={styles["form-input"]}
             type="email"
             name="email"
-            value={form.email}
+            value={form?.email}
             onChange={handleChange}
             required
           />
@@ -160,7 +163,7 @@ function ProfilePage() {
             className={styles["form-input"]}
             type="url"
             name="github"
-            value={form.github}
+            value={form?.github}
             onChange={handleChange}
             required
           />
@@ -171,7 +174,7 @@ function ProfilePage() {
             className={styles["form-input"]}
             type="url"
             name="linkedin"
-            value={form.linkedin}
+            value={form?.linkedin}
             onChange={handleChange}
             required
           />
@@ -204,8 +207,8 @@ function ProfilePage() {
                   Hosted Link:
                   <input
                     className={styles["form-input"]}
-                    name="HostedLink"
-                    value={project.HostedLink}
+                    name="hostedlink"
+                    value={project.hostedlink}
                     onChange={(event) => handleProjectChange(index, event)}
                     required
                   />
@@ -265,9 +268,9 @@ function ProfilePage() {
           type="submit"
           disabled={!isEditing}
         >
-          {form._id ? "Update" : "Submit"}
+          {form?._id ? "Update" : "Submit"}
         </button>
-        {form._id && !isEditing && (
+        {form?._id && !isEditing && (
           <button
             className={cls(styles["form-button"], styles["edit-button"])}
             type="button"

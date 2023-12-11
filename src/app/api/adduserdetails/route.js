@@ -16,7 +16,7 @@ export async function POST(req) {
     data._id = id;
     await UserDetailsSchema.create(data);
     return NextResponse.json(
-      { message: "User Added Succesfully" },
+      { success: true, message: "User Added Succesfully" },
       { status: 200 }
     );
   } catch (error) {

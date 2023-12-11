@@ -47,7 +47,7 @@ export async function POST(req) {
 
     // Create a response with a success message and a 200 status code
     const response = NextResponse.json(
-      { message: "Logged in Succesfully!" },
+      { success: true, message: "Logged in Succesfully!" },
       { status: 200 }
     );
 

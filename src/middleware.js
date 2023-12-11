@@ -13,7 +13,7 @@ export async function middleware(req) {
     req.nextUrl.pathname === "/login" ||
     req.nextUrl.pathname === "/signup" ||
     req.nextUrl.pathname.includes("/api/login") ||
-    req.nextUrl.pathname.includes("/api/add")
+    req.nextUrl.pathname.includes("/api/signup")
   ) {
     try {
       // Check if a token is already present
